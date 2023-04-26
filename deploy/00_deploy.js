@@ -9,35 +9,19 @@ const wallet = new ethers.Wallet(private_key, ethers.provider)
 
 module.exports = async ({ deployments }) => {
     console.log("Wallet Ethereum Address:", wallet.address)
-    const chainId = network.config.chainId
-    const tokensToBeMinted = networkConfig[chainId]["tokensToBeMinted"]
 
     
-    //deploy Simplecoin
-    const SimpleCoin = await ethers.getContractFactory('SimpleCoin', wallet);
-    console.log('Deploying Simplecoin...');
-    const simpleCoin = await SimpleCoin.deploy(tokensToBeMinted);
-    await simpleCoin.deployed()
-    console.log('SimpleCoin deployed to:', simpleCoin.address);
+    //deploy MembershipNFT
+    const MembershipNFT = await ethers.getContractFactory('MembershipNFT', wallet);
+    console.log('Deploying MembershipNFT...');
+    const membershipNFT = await MembershipNFT.deploy();
+    await membershipNFT.deployed()
+    console.log('MembershipNFT deployed to:', membershipNFT.address);
 
-    //deploy FilecoinMarketConsumer
-    const FilecoinMarketConsumer = await ethers.getContractFactory('FilecoinMarketConsumer', wallet);
-    console.log('Deploying FilecoinMarketConsumer...');
-    const filecoinMarketConsumer = await FilecoinMarketConsumer.deploy();
-    await filecoinMarketConsumer.deployed()
-    console.log('FilecoinMarketConsumer deployed to:', filecoinMarketConsumer.address);
-
-    //deploy DealRewarder
-    const DealRewarder = await ethers.getContractFactory('DealRewarder', wallet);
-    console.log('Deploying DealRewarder...');
-    const dealRewarder = await DealRewarder.deploy();
-    await dealRewarder.deployed()
-    console.log('DealRewarder deployed to:', dealRewarder.address);
-    
-    //deploy DealClient
-    const DealClient = await ethers.getContractFactory('DealClient', wallet);
-    console.log('Deploying DealClient...');
-    const dc = await DealClient.deploy();
-    await dc.deployed()
-    console.log('DealClient deployed to:', dc.address);
+    //deploy ResearchDataDAO
+    const ResearchDataDAO = await ethers.getContractFactory('ResearchDataDAO', wallet);
+    console.log('Deploying ResearchDataDAO...');
+    const researchDataDAO = await ResearchDataDAO.deploy([wallet.address],membershipNFT.address);
+    await researchDataDAO.deployed()
+    console.log('ResearchDataDAO deployed to:', researchDataDAO.address);
 }
